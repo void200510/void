@@ -1,0 +1,138 @@
+shader_type spatial;
+render_mode blend_add, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform vec3 Gradient_offset;
+uniform sampler2D tex_frg_3;
+uniform sampler2D tex_frg_11;
+uniform sampler2D tex_frg_6;
+uniform vec2 moving_offset;
+uniform sampler2D tex_frg_7;
+uniform vec2 moving_offset_2;
+uniform sampler2D tex_frg_17;
+uniform vec3 Dissolve_offset;
+uniform vec4 ColorParameter : source_color;
+uniform vec4 Color_2 : source_color;
+
+
+
+void fragment() {
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+// Vector3Parameter:15
+	vec3 n_out15p0 = Gradient_offset;
+
+
+// VectorOp:5
+	vec3 n_out5p0 = vec3(n_out2p0, 0.0) - n_out15p0;
+
+
+// Texture2D:3
+	vec4 n_out3p0 = texture(tex_frg_3, vec2(n_out5p0.xy));
+
+
+// Texture2D:11
+	vec4 n_out11p0 = texture(tex_frg_11, vec2(n_out5p0.xy));
+
+
+// VectorOp:10
+	vec2 n_out10p0 = vec2(n_out3p0.xy) - vec2(n_out11p0.xy);
+
+
+// Texture2D:6
+	vec4 n_out6p0 = texture(tex_frg_6, UV);
+
+
+// Input:12
+	vec2 n_out12p0 = UV;
+
+
+// Vector2Parameter:13
+	vec2 n_out13p0 = moving_offset;
+
+
+// VectorOp:14
+	vec2 n_out14p0 = n_out12p0 + n_out13p0;
+
+
+// Texture2D:7
+	vec4 n_out7p0 = texture(tex_frg_7, n_out14p0);
+
+
+// VectorOp:8
+	vec2 n_out8p0 = vec2(n_out6p0.xy) - vec2(n_out7p0.xy);
+
+
+// VectorOp:9
+	vec2 n_out9p0 = n_out10p0 - n_out8p0;
+
+
+// Input:16
+	vec2 n_out16p0 = UV;
+
+
+// Vector2Parameter:29
+	vec2 n_out29p0 = moving_offset_2;
+
+
+// VectorOp:30
+	vec2 n_out30p0 = n_out16p0 + n_out29p0;
+
+
+// Texture2D:17
+	vec4 n_out17p0 = texture(tex_frg_17, n_out30p0);
+
+
+// Vector3Parameter:18
+	vec3 n_out18p0 = Dissolve_offset;
+
+
+// VectorFunc:19
+	vec3 n_out19p0 = sin(n_out18p0);
+
+
+// VectorOp:20
+	vec3 n_in20p1 = vec3(2.00000, 2.00000, 2.00000);
+	vec3 n_out20p0 = n_out19p0 / n_in20p1;
+
+
+// VectorOp:21
+	vec3 n_out21p0 = vec3(n_out17p0.xyz) - n_out20p0;
+
+
+// VectorFunc:22
+	vec3 n_out22p0 = round(n_out21p0);
+
+
+// VectorOp:23
+	vec3 n_out23p0 = vec3(n_out9p0, 0.0) * n_out22p0;
+
+
+// ColorParameter:24
+	vec4 n_out24p0 = ColorParameter;
+
+
+// VectorOp:25
+	vec3 n_out25p0 = n_out23p0 * vec3(n_out24p0.xyz);
+
+
+// VectorFunc:26
+	vec3 n_out26p0 = round(n_out25p0);
+
+
+// ColorParameter:27
+	vec4 n_out27p0 = Color_2;
+
+
+// VectorOp:28
+	vec2 n_out28p0 = vec2(n_out25p0.xy) + vec2(n_out27p0.xy);
+
+
+// Output:0
+	ALBEDO = n_out26p0;
+	ALPHA = n_out23p0.x;
+	EMISSION = vec3(n_out28p0, 0.0);
+
+
+}
