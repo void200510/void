@@ -1,0 +1,114 @@
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx;
+
+uniform sampler2D tex_frg_11;
+uniform vec2 speed = vec2(0.000000, 10.000000);
+uniform sampler2D tex_frg_5;
+uniform vec4 color : source_color;
+uniform vec4 color2 : source_color;
+uniform sampler2D tex_frg_30;
+uniform vec2 dissovle;
+
+
+
+void fragment() {
+// Input:12
+	vec2 n_out12p0 = UV;
+
+
+// Texture2D:11
+	vec4 n_out11p0 = texture(tex_frg_11, n_out12p0);
+
+
+// Input:3
+	vec2 n_out3p0 = UV;
+
+
+// Vector2Parameter:16
+	vec2 n_out16p0 = speed;
+
+
+// Input:6
+	float n_out6p0 = TIME;
+
+
+// VectorOp:8
+	vec2 n_out8p0 = n_out16p0 * vec2(n_out6p0);
+
+
+// VectorOp:9
+	vec2 n_out9p0 = n_out3p0 - n_out8p0;
+
+
+// Texture2D:5
+	vec4 n_out5p0 = texture(tex_frg_5, n_out9p0);
+
+
+// VectorOp:13
+	vec4 n_out13p0 = mod(n_out11p0, n_out5p0);
+
+
+// VectorFunc:14
+	vec4 n_out14p0 = asin(n_out13p0);
+
+
+// ColorParameter:15
+	vec4 n_out15p0 = color;
+
+
+// ColorParameter:37
+	vec4 n_out37p0 = color2;
+
+
+// VectorOp:21
+	vec4 n_out21p0 = n_out15p0 * n_out37p0;
+
+
+// VectorOp:22
+	vec4 n_out22p0 = n_out14p0 + n_out21p0;
+
+
+// Input:25
+	vec2 n_out25p0 = UV;
+
+
+// Texture2D:30
+	vec4 n_out30p0 = texture(tex_frg_30, n_out25p0);
+
+
+// Vector2Parameter:31
+	vec2 n_out31p0 = dissovle;
+
+
+// VectorFunc:32
+	vec2 n_out32p0 = sin(n_out31p0);
+
+
+// VectorOp:33
+	vec2 n_in33p1 = vec2(2.00000, 2.00000);
+	vec2 n_out33p0 = n_out32p0 / n_in33p1;
+
+
+// VectorOp:34
+	vec2 n_out34p0 = vec2(n_out30p0.xy) - n_out33p0;
+
+
+// VectorFunc:35
+	vec2 n_out35p0 = round(n_out34p0);
+
+
+// VectorOp:36
+	vec2 n_out36p0 = vec2(n_out14p0.xy) - n_out35p0;
+
+
+// VectorFunc:38
+	vec4 n_out38p0 = round(n_out22p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out22p0.xyz);
+	ALPHA = n_out36p0.x;
+	EMISSION = vec3(n_out38p0.xyz);
+
+
+}
